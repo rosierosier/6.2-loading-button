@@ -4,14 +4,17 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var loading = require('./models/loading');
 
-var submit = new SubmitButton();
+var planetCollection = new loading.Planets();
 
-$('.button-div').click(function(){
-  submit.refresh();
-})
-
-//###################
-//pulling from an API
-//###################
-// var starWarsChars = new characters.CharacterCollection();
-// starWarsChars.fetch().done(function(){
+$('.button-div').on('click', function(){
+  $('.actual-button').html("Loading . . .");
+  this.disabled = true;
+  planetCollection.fetch().done(function(event){
+    $('.actual-button').html("Submit");
+    document.getElementsByClassName('actual-button').disabled = false;
+    event.results.forEach(function(planet){
+      console.log(planet.name);
+      $('.container').append('<p>' + planet.name + '</p>');
+    });
+  });
+});

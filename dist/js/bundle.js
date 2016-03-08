@@ -6,17 +6,20 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var loading = require('./models/loading');
 
-var submit = new SubmitButton();
+var planetCollection = new loading.Planets();
 
-$('.button-div').click(function(){
-  submit.refresh();
-})
-
-//###################
-//pulling from an API
-//###################
-// var starWarsChars = new characters.CharacterCollection();
-// starWarsChars.fetch().done(function(){
+$('.button-div').on('click', function(){
+  $('.actual-button').html("Loading . . .");
+  this.disabled = true;
+  planetCollection.fetch().done(function(event){
+    $('.actual-button').html("Submit");
+    document.getElementsByClassName('actual-button').disabled = false;
+    event.results.forEach(function(planet){
+      console.log(planet.name);
+      $('.container').append('<p>' + planet.name + '</p>');
+    });
+  });
+});
 
 },{"./models/loading":2,"backbone":4,"handlebars":34,"jquery":46}],2:[function(require,module,exports){
 "use strict";
@@ -24,20 +27,44 @@ var handlebars = require('handlebars');
 var $ = require('jquery');
 var Backbone = require('backbone');
 
-console.log('hi')
+var Planet = Backbone.Model.extend({
 
-var SubmitButton = Backbone.Model.extend({
-  defaults: {
-    // 'quantity': 0
-  },
-  refresh: function(){
-    // this.set('quantity', this.get('quantity') + 1);
-    $('.button-div').empty();
-    $('.button-div').append('<button type="button" class="actual-button"><p>Loading . . .</p></button>')
+});
+
+var Planets = Backbone.Collection.extend({
+  model: Planet,
+  url: 'http://swapi.co/api/planets',
+  parse: function(data){
+    return data.results;
   }
 });
 
-module.exports = SubmitButton;
+// var planets = new Planets();
+// planets.create({name: 'kepler'});
+
+
+// $('.button-div').on('click', function(){
+//   planets.fetch().done(function(){
+//     // planets.each(function(planet){
+//       console.log(planet);
+//     // });
+//   });
+// });
+console.log('planets');
+
+// planets.add({
+//   name: 'kepler',
+//   terrain: 'rough'
+// });
+
+// planets.each(function(planet){
+//   planet.save();
+// });
+
+module.exports = {
+  'Planet': Planet,
+  'Planets': Planets
+};
 
 },{"backbone":4,"handlebars":34,"jquery":46}],3:[function(require,module,exports){
 (function (process,__filename){
