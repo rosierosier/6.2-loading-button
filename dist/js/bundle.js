@@ -6,11 +6,38 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var loading = require('./models/loading');
 
+var submit = new SubmitButton();
+
+$('.button-div').click(function(){
+  submit.refresh();
+})
+
+//###################
+//pulling from an API
+//###################
+// var starWarsChars = new characters.CharacterCollection();
+// starWarsChars.fetch().done(function(){
+
 },{"./models/loading":2,"backbone":4,"handlebars":34,"jquery":46}],2:[function(require,module,exports){
 "use strict";
 var handlebars = require('handlebars');
 var $ = require('jquery');
 var Backbone = require('backbone');
+
+console.log('hi')
+
+var SubmitButton = Backbone.Model.extend({
+  defaults: {
+    // 'quantity': 0
+  },
+  refresh: function(){
+    // this.set('quantity', this.get('quantity') + 1);
+    $('.button-div').empty();
+    $('.button-div').append('<button type="button" class="actual-button"><p>Loading . . .</p></button>')
+  }
+});
+
+module.exports = SubmitButton;
 
 },{"backbone":4,"handlebars":34,"jquery":46}],3:[function(require,module,exports){
 (function (process,__filename){
